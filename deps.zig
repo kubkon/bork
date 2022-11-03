@@ -5,14 +5,14 @@ const FileSource = std.build.FileSource;
 pub const pkgs = struct {
     pub const zbox = Pkg{
         .name = "zbox",
-        .path = FileSource{
-            .path = "forks/zbox/src/box.zig",
+        .source = FileSource{
+            .path = "forks\\zbox\\src\\box.zig",
         },
         .dependencies = &[_]Pkg{
             Pkg{
                 .name = "ziglyph",
-                .path = FileSource{
-                    .path = ".gyro/ziglyph-jecolon-github.com-c37d93b6/pkg/src/ziglyph.zig",
+                .source = FileSource{
+                    .path = ".gyro\\ziglyph-jecolon-github.com-531d3095\\pkg\\src\\ziglyph.zig",
                 },
             },
         },
@@ -20,50 +20,50 @@ pub const pkgs = struct {
 
     pub const datetime = Pkg{
         .name = "datetime",
-        .path = FileSource{
-            .path = ".gyro/zig-datetime-frmdstryr-github.com-4782701c/pkg/src/datetime.zig",
+        .source = FileSource{
+            .path = ".gyro\\zig-datetime-frmdstryr-github.com-932d2845\\pkg\\src\\datetime.zig",
         },
     };
 
     pub const clap = Pkg{
         .name = "clap",
-        .path = FileSource{
-            .path = ".gyro/zig-clap-Hejsil-github.com-844c9370/pkg/clap.zig",
+        .source = FileSource{
+            .path = ".gyro\\zig-clap-Hejsil-github.com-749c43f1\\pkg\\clap.zig",
         },
     };
 
     pub const iguanaTLS = Pkg{
         .name = "iguanaTLS",
-        .path = FileSource{
-            .path = ".gyro/iguanaTLS-nektro-github.com-954fd016/pkg/src/main.zig",
+        .source = FileSource{
+            .path = ".gyro\\iguanaTLS-nektro-github.com-bd003aa7\\pkg\\src\\main.zig",
         },
     };
 
     pub const hzzp = Pkg{
         .name = "hzzp",
-        .path = FileSource{
-            .path = ".gyro/hzzp-truemedian-github.com-91ab8e74/pkg/src/main.zig",
+        .source = FileSource{
+            .path = ".gyro\\hzzp-truemedian-github.com-4ecbaa41\\pkg\\src\\main.zig",
         },
     };
 
     pub const tzif = Pkg{
         .name = "tzif",
-        .path = FileSource{
-            .path = ".gyro/zig-tzif-leroycep-github.com-cbb1d9f6/pkg/tzif.zig",
+        .source = FileSource{
+            .path = ".gyro\\zig-tzif-leroycep-github.com-cbb1d9f6\\pkg\\tzif.zig",
         },
     };
 
     pub const ziglyph = Pkg{
         .name = "ziglyph",
-        .path = FileSource{
-            .path = ".gyro/ziglyph-jecolon-github.com-c37d93b6/pkg/src/ziglyph.zig",
+        .source = FileSource{
+            .path = ".gyro\\ziglyph-jecolon-github.com-531d3095\\pkg\\src\\ziglyph.zig",
         },
     };
 
     pub const @"known-folders" = Pkg{
         .name = "known-folders",
-        .path = FileSource{
-            .path = ".gyro/known-folders-ziglibs-github.com-f299244d/pkg/known-folders.zig",
+        .source = FileSource{
+            .path = ".gyro\\known-folders-ziglibs-github.com-24845b01\\pkg\\known-folders.zig",
         },
     };
 
@@ -82,7 +82,7 @@ pub const pkgs = struct {
 pub const exports = struct {
     pub const bork = Pkg{
         .name = "bork",
-        .path = "src/main.zig",
+        .source = FileSource{ .path = "src/main.zig" },
         .dependencies = &[_]Pkg{
             pkgs.zbox,
             pkgs.datetime,

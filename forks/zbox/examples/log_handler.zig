@@ -17,7 +17,7 @@ pub fn log(
     writer.print("{}: {}:" ++ format ++ "\n", .{ @tagName(message_level), @tagName(scope) } ++ args) catch return;
 }
 
-pub fn panic(msg: []const u8, trace: ?*std.builtin.StackTrace) noreturn {
+pub fn panic(msg: []const u8, trace: ?*std.builtin.StackTrace, _: ?usize) noreturn {
     term.deinit();
     //std.debug.print("wtf?", .{});
     log(.emerg, .examples, "{}", .{msg});

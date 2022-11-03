@@ -69,13 +69,16 @@ const Subcommand = enum {
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    var alloc = &gpa.allocator;
+    const alloc = gpa.allocator();
 
-    var it = try clap.args.OsIterator.init(alloc);
+    var it = try std.process.ArgIterator.initWithAllocator(alloc);
     defer it.deinit();
 
+    // Skip exe argument
+    _ = it.next();
+
     const subcommand = subcommand: {
-        const subc_string = (try it.next()) orelse {
+        const subc_string = (it.next()) orelse {
             printHelp();
             return;
         };
@@ -294,10 +297,10 @@ pub fn log(
     }
 }
 
-pub fn panic(msg: []const u8, trace: ?*std.builtin.StackTrace) noreturn {
+pub fn panic(msg: []const u8, trace: ?*std.builtin.StackTrace, first_stack_addr: ?usize) noreturn {
     nosuspend Terminal.panic();
     log(.err, .default, "{s}", .{msg});
-    std.builtin.default_panic(msg, trace);
+    std.builtin.default_panic(msg, trace, first_stack_addr);
 }
 
 fn printHelp() void {
@@ -325,7 +328,7 @@ const ConfigAndToken = struct {
     token: []const u8,
 };
 
-fn get_config_and_token(alloc: *std.mem.Allocator, check_token: bool) !ConfigAndToken {
+fn get_config_and_token(alloc: std.mem.Allocator, check_token: bool) !ConfigAndToken {
     var base_path = (try folders.getPath(alloc, .home)) orelse
         (try folders.getPath(alloc, .executable_dir)) orelse
         @panic("couldn't find a way of creating a config file");
@@ -431,7 +434,7 @@ const OldTokenAndPath = struct {
     }
 };
 
-fn cleanupOldTokenAndGreet(alloc: *std.mem.Allocator) !OldTokenAndPath {
+fn cleanupOldTokenAndGreet(alloc: std.mem.Allocator) !OldTokenAndPath {
     // Find out it the user has an old bork auth token file
     const old_dir_p = std.os.getenv("HOME") orelse ".";
     var old_dir = try std.fs.openDirAbsolute(old_dir_p, .{});
@@ -446,7 +449,7 @@ fn cleanupOldTokenAndGreet(alloc: *std.mem.Allocator) !OldTokenAndPath {
     return OldTokenAndPath{ .token = old_oauth, .dir = old_dir };
 }
 
-fn create_config(alloc: *std.mem.Allocator, base: std.fs.Dir, base_path: []const u8, is_new_user: bool) !BorkConfig {
+fn create_config(alloc: std.mem.Allocator, base: std.fs.Dir, base_path: []const u8, is_new_user: bool) !BorkConfig {
     const in = std.io.getStdIn();
     const in_reader = in.reader();
 
@@ -648,7 +651,7 @@ fn create_config(alloc: *std.mem.Allocator, base: std.fs.Dir, base_path: []const
 }
 
 const TokenActon = enum { new, renew };
-fn create_token(alloc: *std.mem.Allocator, base: std.fs.Dir, action: TokenActon) ![]const u8 {
+fn create_token(alloc: std.mem.Allocator, base: std.fs.Dir, action: TokenActon) ![]const u8 {
     var in = std.io.getStdIn();
     const original_termios = try std.os.tcgetattr(in.handle);
     var termios = original_termios;
